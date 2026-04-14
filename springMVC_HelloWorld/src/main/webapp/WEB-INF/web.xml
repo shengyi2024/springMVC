@@ -1,0 +1,85 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+
+  <!--
+      配置springMVC的前端控制器DispatcherServlet
+      url-pattern中的/和/*的区别:
+      1./ : 匹配来自浏览器下的除了.jsp的所有请求
+      2./* : 匹配来自浏览器下的包括.jsp的所有请求
+
+      这里为什么用/而不是用/*呢?
+      在tomcat中的web.xml中已经配置好了针对.jsp文件的servlet
+          <servlet>
+            <servlet-name>jsp</servlet-name>
+            ...
+          </servlet>
+          <servlet-mapping>
+            <servlet-name>jsp</servlet-name>
+            <url-pattern>*.jsp</url-pattern>
+            <url-pattern>*.jspx</url-pattern>
+          </servlet-mapping>
+      因此我们不需要对.jsp文件进行处理，tomcat自带的servlet会自动处理.jsp文件
+
+      除此之外，tomcat还配置了默认的servlet
+      <servlet>
+        <servlet-name>default</servlet-name>
+        ...
+      </servlet>
+      <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/</url-pattern>
+      </servlet-mapping>
+
+      默认的servlet是处理静态资源和目录列表展示
+      如果自定义 Servlet 的 <url-pattern> 匹配范围更广（如 /），
+      会覆盖 DefaultServlet，导致静态资源无法访问；
+
+      SpringMVC的配置文件默认的位置和名称（通常是不放在默认位置的，放在resources目录下）:
+        1.位置: WEB-INF下 2.名称:servlet-name属性值-servlet.xml
+      如果说我不想将我的配置文件放到WEB-INF目录下，那我需要做些怎样的配置呢?
+  -->
+
+  <!--
+
+      总结:
+        首先浏览器向服务器发送请求，然后请求会被web.xml文件中设置的前端控制器接收，
+        然后前端控制器就会根据springMVC的配置文件，进行组件的扫描，找到对应的请求路径的方法，
+        得到返回值，交给视图解析器进行解析，最终返回给浏览器物理视图。
+  -->
+  <servlet>
+    <!-- Servlet 的名称，可以自定义 -->
+    <servlet-name>SpringMVC</servlet-name>
+    <!-- 指定 Servlet 的完整类名，这是 Spring MVC 的核心类 -->
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <!--
+          contextConfigLocation表示的是mvc配置文件的路径
+          也就是说，现在的DispatcherServlet的配置文件不是在WEB-INF下的，
+          而是人为设置在了resources目录下的springmvc.xml中，
+          到时候会自动地读取这个文件配置
+          注意classpath前缀一定要写，不然默认还是在WEB-INF下的
+      -->
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springmvc.xml</param-value>
+    </init-param>
+    <!--
+      将初始化的时间提前到服务器启动的时候
+      而不是访问的时候 因为 DispatcherServlet 初始化的时候是在访问的时候
+      而初始化需要大量的操作 页面就很慢
+    -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <!-- 与上面的 servlet-name 对应 -->
+    <servlet-name>SpringMVC</servlet-name>
+
+    <!-- 指定哪些请求由这个 Servlet 处理 -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+</web-app>

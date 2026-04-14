@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>employee add</title>
+  <link rel="stylesheet" th:href="@{/static/css/index_work.css}"></link>
+</head>
+<body>
+    <form action="/employee" method="post">
+      <table>
+        <tr>
+          <th colspan="2">add employee</th>
+        </tr>
+        <tr>
+          <td>lastName</td>
+          <td><input type="text" name="lastName"></td>
+        </tr>
+        <tr>
+          <td>email</td>
+          <td><input type="text" name="email"></td>
+        </tr>
+        <tr>
+          <td>gender</td>
+          <td>
+            <input type="radio" name="gender" value="1">male</input>
+            <input type="radio" name="gender" value="0">female</input>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input type="submit" value="add"></input>
+          </td>
+        </tr>
+      </table>
+    </form>
+</body>
+</html>
+
+<!--
+    查询所有员工信息 /employee  GET
+    跳转到添加员工页面 /to/add  GET
+    新增员工信息 /employee  POST
+    跳转到修改员工页面 /to/update/1  GET
+    修改员工信息 /employee  PUT
+    删除员工信息 /employee/1  DELETE
+-->

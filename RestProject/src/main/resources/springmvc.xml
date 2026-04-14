@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 扫描控制层组件 问:为什么要设定成控制层，其他的例如Service层和Dao层不也要放到IOC容器下吗-->
+    <context:component-scan base-package="com.shengyi.restful"></context:component-scan>
+
+    <!-- 配置Thymeleaf视图解析器 -->
+    <bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="order" value="1"/>
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="templateEngine">
+            <bean class="org.thymeleaf.spring5.SpringTemplateEngine">
+                <property name="templateResolver">
+                    <bean class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+                        <!-- 视图前缀 -->
+                        <property name="prefix" value="/WEB-INF/templates/"/>
+                        <!-- 视图后缀 -->
+                        <property name="suffix" value=".html"/>
+                        <property name="templateMode" value="HTML5"/>
+                        <property name="characterEncoding" value="UTF-8" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 配置默认的servlet处理静态资源 -->
+    <!--
+        使用场景: 现在我的empList.html中引入了index_work.css文件，
+        如果我现在向服务器发送请求，那么SpringMVC会将请求交给前端控制器处理
+        （虽然Tomcat默认的Servlet和我定义的前端控制器的url-pattern属性的值是一致的，
+        但是优先使用我在web.xml中定义的Servlet）但是前端控制器是处理不了静态资源的，
+        只有默认的Servlet才能处理静态资源，所以这里需要配置默认的Servlet处理静态资源
+    -->
+    <mvc:default-servlet-handler/>
+    <!--
+        使用场景: 使得发送过来的请求先被前端控制器处理 <mvc:annotation-driven/> ，
+        而不是被默认的Servlet处理
+        如果处理不了，如静态资源，则交给默认的Servlet处理 <mvc:default-servlet-handler/>
+    -->
+    <mvc:annotation-driven/>
+
+    <mvc:view-controller path="/" view-name="index"></mvc:view-controller>
+    <mvc:view-controller path="/to/add" view-name="emp_add"></mvc:view-controller>
+</beans>
