@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.atguigu.controller"></context:component-scan>
+
+    <bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="order" value="1"/>
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="templateEngine">
+            <bean class="org.thymeleaf.spring5.SpringTemplateEngine">
+                <property name="templateResolver">
+                    <bean class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+                        <property name="prefix" value="/WEB-INF/templates/"/>
+                        <property name="suffix" value=".html"/>
+                        <property name="templateMode" value="HTML5"/>
+                        <property name="characterEncoding" value="UTF-8" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <mvc:default-servlet-handler/>
+
+    <mvc:annotation-driven/>
+
+    <mvc:view-controller path="/" view-name="index"></mvc:view-controller>
+
+    <!-- 配置文件上传解析器 -->
+    <!-- 不能直接使用MultipartResolver 因为它是一个接口 需要找到它的实现类 -->
+    <!-- DispatcherServlet在服务器启动时就初始化了 CommonsMultipartResolver的作用域是单例的 单例Bean 在容器初始化时 创建并使用 -->
+    <!-- Spring IOC容器不是根据类型获取组件的 而是通过id获取组件的 id固定为multipartResolver-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+<!--   设置默认编码:<property name="DefaultEncoding" value="UTF-8"></property> -->
+<!--   设置上传文件最大容量:<property name="MaxUploadSize" value="5242880"></property>-->
+    </bean>
+</beans>

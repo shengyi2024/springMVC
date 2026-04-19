@@ -9,18 +9,6 @@
     </option>
     <option name="ignoredFiles">
       <set>
-        <option value="$PROJECT_DIR$/Cookie/pom.xml" />
-        <option value="$PROJECT_DIR$/RESTfulTest/pom.xml" />
-        <option value="$PROJECT_DIR$/Session/pom.xml" />
-        <option value="$PROJECT_DIR$/jsp_jstl/pom.xml" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/rest/pom.xml" />
-        <option value="$PROJECT_DIR$/springMVC_data/pom.xml" />
-        <option value="$PROJECT_DIR$/springMVC_dataSharing/pom.xml" />
-        <option value="$PROJECT_DIR$/spring_ajax/pom.xml" />
-        <option value="$PROJECT_DIR$/untitled/pom.xml" />
-        <option value="$PROJECT_DIR$/vue/pom.xml" />
-        <option value="$PROJECT_DIR$/vueTest/pom.xml" />
       </set>
     </option>
   </component>

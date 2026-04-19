@@ -14,6 +14,8 @@
         <module>Rest</module>
         <module>RestProject</module>
         <module>springmvc_ajax</module>
+        <module>springmvc_interceptor</module>
+        <module>springmvc_exceptionResolver</module>
     </modules>
 
 
@@ -22,5 +24,6 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
 </project>
