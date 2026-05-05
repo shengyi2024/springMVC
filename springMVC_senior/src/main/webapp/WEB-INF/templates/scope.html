@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>scope.html</title>
+</head>
+<body>
+    <h1>测试三大作用域</h1>
+    <p>测试request作用域</p>
+    <p th:text="${p1}"></p>
+    <p th:text="${u1}"></p>
+
+    <p>测试session作用域</p>
+    <p th:text="${session.p2}"></p>
+    <p th:text="${session.u2}"></p>
+
+    <p>测试application作用域</p>
+    <p th:text="${application.p3}"></p>
+    <p th:text="${application.u3}"></p>
+</body>
+</html>

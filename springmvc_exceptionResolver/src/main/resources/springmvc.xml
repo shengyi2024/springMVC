@@ -29,8 +29,36 @@
 
     <mvc:view-controller path="/" view-name="index"></mvc:view-controller>
 
-    <mvc:interceptors>
-        <ref bean="helloInterceptor"></ref>
-        <ref bean="otherInterceptor"></ref>
-    </mvc:interceptors>
+
+    <!-- 配置异常处理解析器 -->
+    <!--
+        SpringMVC提供了一个处理控制器方法执行过程中所出现的异常的接口:HandlerExceptionResolver
+        HandlerExceptionResolver接口实现类有:DefaultHandlerExceptionResolver和SimpleMappingExceptionResolver
+        SpringMVC提供了自定义的异常处理器类:SimpleMappingExceptionResolver，默认使用的是DefaultHandlerExceptionResolver（不管有没有配置自定义的异常处理解析器）
+    -->
+<!--    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">-->
+<!--        &lt;!&ndash; 配置属性:-->
+<!--            1.exceptionMappings:类型为 properties-->
+<!--            使用<props>标签配置其value值。-->
+<!--            在<props>中使用其子标签<prop>配置具体的异常关系映射，key属性表示具体的异常类，-->
+<!--            标签中间的内容表示的是出现对应异常需要跳转的逻辑视图。这里会被Thymeleaf的视图解析器进行解析后再跳转。-->
+<!--            2.exceptionAttribute:类型为 String-->
+<!--            在Model请求域中存放控制器方法执行过程中出现的异常，但现在需要在跳转页面中显示出现了什么异常，-->
+<!--            就必须设置一个键来表示，值是出现的异常名称。在页面中通过键获取异常信息。-->
+<!--        &ndash;&gt;-->
+
+<!--        <property name="exceptionMappings">-->
+<!--            <props>-->
+<!--                <prop key="java.lang.ArithmeticException">error</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+<!--        <property name="exceptionAttribute" value="ex"></property>-->
+<!--    </bean>-->
+    <!--
+        当控制器方法在执行过程中出现异常时，会调用resolveException方法，将异常对象作为参数传递给此方法
+        此方法返回ModelAndView对象，分为两个部分:Model和 View
+        Model:封装数据的对象 View:视图对象
+        我们可以将数据封装到Model中，将视图指定到View中，返回给前端。
+        实现跳转页面，响应异常信息。
+     -->
 </beans>

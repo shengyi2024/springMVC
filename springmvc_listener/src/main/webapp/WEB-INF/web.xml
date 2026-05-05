@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <servlet>
+        <servlet-name>SpringMVC</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springmvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SpringMVC</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!--
+        Spring的IOC容器和SpringMVC的IOC容器的创建顺序:
+            1.Spring的IOC容器管理的service和dao层的组件，而SpringMVC的IOC容器管理的是controller层的组件。
+            2.Spring的IOC容器创建的时候要先于SpringMVC的IOC容器创建。怎么去理解这点?
+                简单来说，controller层需要访问service层和dao层，而controller层是交给SpringMVC的IOC容器进行管理的，
+                service和dao层则是交给Spring的IOC容器进行管理的。所以controller层要想调用service和dao层的组件，
+                就必须先一步进行创建。
+            3.SpringMVC的IOC容器是在前端控制器初始化的时候创建的。那么可以认为Spring的IOC容器要先于前端控制器创建,创建只执行一次。
+
+        ContextLoaderListener:Spring提供了监听器ContextLoaderListener，实现ServletContextListener接口，可监听ServletContext的状态。
+        在web服务器启动时，读取Spring的配置文件，创建Spring的IOC容器，web应用中必须在web.xml中配置。
+
+        Listener,Filter,Servlet初始化时间:Listener和Filter要早于Servlet初始化时间。
+        所以Spring的IOC容器创建可以在Listener创建的时候创建。
+    -->
+    <listener>
+        <!--
+            配置Spring的监听器，在服务器启动时加载Spring的配置文件
+            Spring配置文件默认位置和名称为: /WEB-INF/applicationContext.xml
+            可通过上下文参数自定义Spring的配置文件的位置和名称
+        -->
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- 自定义Spring的配置文件位置和名称 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring.xml</param-value>
+    </context-param>
+</web-app>

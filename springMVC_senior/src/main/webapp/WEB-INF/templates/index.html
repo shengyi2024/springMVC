@@ -11,9 +11,14 @@
     <form th:action="@{/hello}" method="post">
         <input type="submit" value="测试method属性"/>
     </form>
+    <!-- ant:RequestMapping("/**/test/ant") -->
+    <!-- @RequestMapping("/a?a/test/ant") -->
+    <!-- @RequestMapping("/a*a/test/ant") -->
     <a th:href="@{/aba/test/ant}">测试ant风格匹配</a><br/>
-    <a th:href="@{/test/rest/admin/1}">测试@RequestMapping注解的value属性值中的占位符</a>
+    <!-- REST:@RequestMapping("/test/rest/{username}/{id}") -->
+    <a th:href="@{/test/rest/admin/1}">测试REST风格的@RequestMapping注解中的占位符</a>
     <hr/>
+    <!-- 三大作用域可以直接访问 -->
     <form th:action="@{/param/rm}" method="post">
         用户名:<input type="text" name="username"/><br/>
         密码:<input type="password" name="password"/>

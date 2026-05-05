@@ -16,6 +16,9 @@
         <module>springmvc_ajax</module>
         <module>springmvc_interceptor</module>
         <module>springmvc_exceptionResolver</module>
+        <module>springmvc_annotation</module>
+        <module>springmvc_listener</module>
+        <module>ssm</module>
     </modules>
 
 

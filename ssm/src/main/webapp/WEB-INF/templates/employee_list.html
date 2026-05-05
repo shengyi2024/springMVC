@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>员工展示页面</title>
+    <link rel="stylesheet" th:href="@{/static/css/index_work.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}"/>
+</head>
+<body>
+    <table>
+        <th colspan="6">员工列表</th>
+        <tr>
+            <th>流水号</th>
+            <th>员工姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>邮箱</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="employee,status:${page.list}">
+            <td th:text="${status.count}"></td>
+            <td th:text="${employee.empName}"></td>
+            <td th:text="${employee.sex}"></td>
+            <td th:text="${employee.age}"></td>
+            <td th:text="${employee.email}"></td>
+            <td>
+                <a href="">删除</a>
+                <a href="">修改</a>
+            </td>
+        </tr>
+    </table>
+    <!-- th:href中的值只能使用字符串拼接的方式，如果使用${}的话，会直接解析成字符串而不是引用的数据 -->
+    <div style="text-align: center;">
+        <a th:if="${page.hasPreviousPage}" th:href="@{/employee/page/1}">首页</a>
+        <a th:if="${page.hasPreviousPage}" th:href="@{'/employee/page/'+${page.prePage}}">上一页</a>
+        <span th:each="pageNum:${page.navigatepageNums}">
+            <a th:if="${page.pageNum == pageNum}" style="color: red" th:href="@{'/employee/page/'+${pageNum}}" th:text="'['+${pageNum}+']'"></a>
+            <a th:if="${page.pageNum != pageNum}"  th:href="@{'/employee/page/'+${pageNum}}" th:text="${pageNum}"></a>
+        </span>
+        <a th:if="${page.hasNextPage}" th:href="@{'/employee/page/'+${page.nextPage}}">下一页</a>
+        <a th:if="${page.hasNextPage}" th:href="@{'/employee/page/'+${page.pages}}">尾页</a>
+    </div>
+</body>
+</html>

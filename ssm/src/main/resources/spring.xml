@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 扫描组件（除控制层） -->
+    <context:component-scan base-package="com.atguigu">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 引入jdbc.properties文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!--配置数据源（原来在mybatis-config.xml文件中配置）-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 引用数据源 -->
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--
+        开启事务的注解驱动
+        将使用注解@Transactional标识的方法或类中所有的方法进行事务管理
+    -->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+
+    <!-- Spring整合mybatis需要两步 -->
+    <!-- 1.配置SqlSessionFactoryBean -->
+    <!-- implements FactoryBean<SqlSessionFactory> 泛型值是IOC容器管理的组件而不是工厂组件 可以直接获取SqlSessionFactory-->
+    <!--
+        之前学习mybatis时，创建SqlSessionFactory对象时，需要引用mybatis的核心配置文件
+             public static SqlSession getSqlSession(){
+                SqlSession sqlSession = null;
+                try{
+                    InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
+                    SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+                    SqlSessionFactory factory = builder.build(is);
+                    sqlSession = factory.openSession(true);
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+                return sqlSession;
+            }
+        那么在Spring中，创建SqlSessionFactory对象时，也需要引用核心配置文件
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+
+        配置SqlSessionFactoryBean不仅可以引用mybatis-config.xml核心配置文件
+        也可以在Spring的配置文件中配置需要的属性值。
+    -->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 引用核心配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <!-- 在Spring配置文件中配置需要的属性值 可以代替引用mybatis的核心配置文件-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!-- 给指定包下的类取别名 -->
+        <property name="typeAliasesPackage" value="com.atguigu.pojo"></property>
+        <!-- 如果mapper接口和mapper.xml的文件在一个包下，可以不用配置 -->
+        <!-- 如果不一致，则需要配置 -->
+        <!--<property name="mapperLocations" value="classpath:mappers/*.xml"></property>-->
+<!--        <property name="configurationProperties">-->
+<!--            <props>-->
+<!--                &lt;!&ndash; 配置映射模式为驼峰命名 &ndash;&gt;-->
+<!--                <prop key="mapUnderscoreToCamelCase">true</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+    </bean>
+
+    <!--
+        2.扫描Mapper接口，通过 SqlSessionFactoryBean 的 bean组件，
+        获取指定包下的接口的代理实现类对象并且将这些对象交给IOC容器进行管理,
+        可以实现自动装配mapper接口的实现类
+    -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.atguigu.mapper"></property>
+    </bean>
+</beans>
